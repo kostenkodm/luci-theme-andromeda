@@ -25,8 +25,8 @@
 <meta name="apple-mobile-web-app-title" content="{{ striptags(boardinfo.hostname ?? "?") }} - LuCI">
 <link rel="stylesheet" href="{{ media }}/gaya/gaya.css">
 <link rel="shortcut icon" href="{{ media }}/favicon.ico">
-{% if (node?.css): %}
-<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
+{% if (dispatched?.css): %}
+<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">
 {% endif %}
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>
