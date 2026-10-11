@@ -56,11 +56,7 @@ if [ "$ACTION" = restore ]; then
     exit 0
 fi
 
-HAS_UCODE=0
-HAS_LUA=0
-[ ! -d "$ROOT/usr/share/ucode/luci/template" ] || HAS_UCODE=1
-[ ! -d "$ROOT/usr/lib/lua/luci/view" ] || HAS_LUA=1
-[ "$HAS_UCODE$HAS_LUA" != 00 ] || fail 'LuCI template directories were not found.'
+[ -d "$ROOT/usr/share/ucode/luci/template" ] || fail 'Andromeda requires LuCI ucode templates (OpenWrt 23.05 or later).'
 
 OLD_MEDIA=$(uci_cmd -q get luci.main.mediaurlbase) || fail 'Cannot read the current theme.'
 case "$OLD_MEDIA" in /luci-static/*) ;; *) fail 'Unexpected current theme path.' ;; esac
@@ -68,7 +64,7 @@ case "$OLD_MEDIA" in /luci-static/*) ;; *) fail 'Unexpected current theme path.'
 
 if [ -z "$SOURCE" ]; then
     script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-    if [ -f "$script_dir/js/menu-andromeda.js" ]; then
+    if [ -f "$script_dir/htdocs/luci-static/resources/menu-andromeda.js" ]; then
         SOURCE=$script_dir
     else
         WORK=$(mktemp -d /tmp/andromeda.XXXXXX)
@@ -86,28 +82,26 @@ if [ -z "$SOURCE" ]; then
     fi
 fi
 
-for file in luasrc/gaya/gaya.css js/menu-andromeda.js root/etc/config/andromeda; do
+for file in Makefile htdocs/luci-static/andromeda/main.css htdocs/luci-static/andromeda/login.css htdocs/luci-static/resources/menu-andromeda.js htdocs/luci-static/resources/router-andromeda.js root/etc/config/andromeda; do
     [ -s "$SOURCE/$file" ] || fail "Missing source file: $file"
 done
 for file in header footer sysauth; do
-    [ "$HAS_UCODE" = 0 ] || [ -s "$SOURCE/template/$file.ut" ] || fail "Missing $file.ut"
-    [ "$HAS_LUA" = 0 ] || [ -s "$SOURCE/template/$file.htm" ] || fail "Missing $file.htm"
+    [ -s "$SOURCE/ucode/template/themes/andromeda/$file.ut" ] || fail "Missing $file.ut"
 done
+version=$(sed -n 's/^PKG_VERSION:=[[:space:]]*//p' "$SOURCE/Makefile")
+case "$version" in ''|*[!0-9A-Za-z.+_-]*) fail 'Invalid theme version.' ;; esac
 
 mkdir -p "$ROOT/etc/andromeda" "$ROOT/www/luci-static/andromeda" "$ROOT/www/luci-static/resources"
 if [ "$OLD_MEDIA" != /luci-static/andromeda ]; then
     printf '%s\n' "$OLD_MEDIA" > "$BACKUP"
 fi
-cp -R "$SOURCE/luasrc/." "$ROOT/www/luci-static/andromeda/"
-cp "$SOURCE/js/menu-andromeda.js" "$ROOT/www/luci-static/resources/"
-if [ "$HAS_UCODE" = 1 ]; then
-    mkdir -p "$ROOT/usr/share/ucode/luci/template/themes/andromeda"
-    cp "$SOURCE"/template/*.ut "$ROOT/usr/share/ucode/luci/template/themes/andromeda/"
-fi
-if [ "$HAS_LUA" = 1 ]; then
-    mkdir -p "$ROOT/usr/lib/lua/luci/view/themes/andromeda"
-    cp "$SOURCE"/template/*.htm "$ROOT/usr/lib/lua/luci/view/themes/andromeda/"
-fi
+cp -R "$SOURCE/htdocs/luci-static/andromeda/." "$ROOT/www/luci-static/andromeda/"
+cp -R "$SOURCE/htdocs/luci-static/resources/." "$ROOT/www/luci-static/resources/"
+mkdir -p "$ROOT/usr/share/ucode/luci/template/themes/andromeda"
+for file in header footer sysauth; do
+    # luci.mk replaces this marker in SDK packages; stamp direct installs too.
+    sed "s/{# PKG_VERSION #}/$version/g" "$SOURCE/ucode/template/themes/andromeda/$file.ut" > "$ROOT/usr/share/ucode/luci/template/themes/andromeda/$file.ut"
+done
 if [ ! -f "$ROOT/etc/config/andromeda" ]; then
     cp "$SOURCE/root/etc/config/andromeda" "$ROOT/etc/config/andromeda"
 fi

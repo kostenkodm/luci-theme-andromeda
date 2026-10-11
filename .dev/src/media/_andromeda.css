@@ -1,0 +1,64 @@
+/* Andromeda density. Mobile controls retain Aurora's larger touch targets. */
+body[data-nav-type="sidebar"] {
+  @apply [--sidebar-w-full:14rem];
+
+  & #navigation-toggle {
+    @apply md:hidden;
+  }
+
+  & > #maincontent {
+    @apply md:px-4;
+  }
+
+  & .sidebar-head {
+    @apply h-12 px-3;
+  }
+
+  & .header-content {
+    @apply h-12 px-4 py-2;
+  }
+
+  & .sidebar-list {
+    @apply p-2;
+  }
+
+  & .sidebar-list .nav-row {
+    @apply rounded-lg px-2 py-1 text-sm tracking-normal;
+  }
+
+  & .sidebar-list .navigation-group-toggle {
+    @apply cursor-default;
+
+    &::after {
+      @apply hidden;
+    }
+  }
+
+  & .sidebar-submenu {
+    @apply pl-4;
+  }
+
+  & .sidebar-submenu .navigation-sublink {
+    @apply rounded-md px-2 py-1 text-sm whitespace-normal;
+  }
+
+  & .sidebar-footer {
+    @apply p-2;
+  }
+}
+
+@media (min-width: 768px) {
+  #maincontent {
+    & h2 { @apply mb-3 pl-3 text-xl; }
+    & h3 { @apply mb-3 text-lg; }
+    & .cbi-section { @apply mb-2 rounded-xl p-3; }
+    & .cbi-section[data-tab-title] { @apply m-0 p-0; }
+    & .cbi-section[data-tab-active="true"] { @apply mb-2 p-3; }
+    & .cbi-value { @apply gap-3 py-1; }
+    & .cbi-value + .cbi-value { @apply mt-1; }
+    & .table { @apply rounded-xl text-sm; }
+    & .table :is(th, td, .th, .td) { @apply px-2 py-1.5; }
+    & .cbi-map-descr, & .cbi-section-descr { @apply mb-3; }
+    & .cbi-page-actions { @apply mt-3 gap-2 pt-3; }
+  }
+}

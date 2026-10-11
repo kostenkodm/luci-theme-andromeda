@@ -36,15 +36,19 @@ fixture() {
     printf '/luci-static/bootstrap\n' > "$fixture_root/etc/config/.media"
 }
 
-for backend in ucode lua hybrid; do
+for backend in ucode hybrid; do
     fixture "$backend"
-    [ "$backend" = lua ] || mkdir -p "$fixture_root/usr/share/ucode/luci/template"
+    mkdir -p "$fixture_root/usr/share/ucode/luci/template"
     [ "$backend" = ucode ] || mkdir -p "$fixture_root/usr/lib/lua/luci/view"
     sh "$SOURCE/install.sh" --source "$SOURCE" --root "$fixture_root"
     [ "$(cat "$fixture_root/etc/config/.media")" = /luci-static/andromeda ]
     [ -s "$fixture_root/www/luci-static/resources/menu-andromeda.js" ]
-    [ "$backend" = lua ] || [ -s "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut" ]
-    [ "$backend" = ucode ] || [ -s "$fixture_root/usr/lib/lua/luci/view/themes/andromeda/header.htm" ]
+    [ -s "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut" ]
+    grep -q 'data-asset-version="2.0.0"' "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut"
+    if grep -q '{# PKG_VERSION #}' "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut"; then exit 1; fi
+    [ -s "$fixture_root/www/luci-static/andromeda/main.css" ]
+    [ -s "$fixture_root/www/luci-static/resources/router-andromeda.js" ]
+
     printf '\n# custom settings\n' >> "$fixture_root/etc/config/andromeda"
     sh "$SOURCE/install.sh" --source "$SOURCE" --root "$fixture_root"
     [ "$(tail -n 1 "$fixture_root/etc/config/andromeda")" = '# custom settings' ]
@@ -54,6 +58,7 @@ for backend in ucode lua hybrid; do
 done
 
 fixture unsupported
+mkdir -p "$fixture_root/usr/lib/lua/luci/view"
 if sh "$SOURCE/install.sh" --source "$SOURCE" --root "$fixture_root"; then exit 1; fi
 [ ! -d "$fixture_root/www/luci-static/andromeda" ]
 
@@ -68,4 +73,14 @@ mkdir -p "$fixture_root/usr/share/ucode/luci/template"
 touch "$fixture_root/etc/config/.fail-once"
 if sh "$SOURCE/install.sh" --source "$SOURCE" --root "$fixture_root"; then exit 1; fi
 [ "$(cat "$fixture_root/etc/config/.media")" = /luci-static/bootstrap ]
-echo 'PASS: ucode/Lua/hybrid install, preserved settings, reinstall, restore, preflight and activation failure'
+fixture migration
+mkdir -p "$fixture_root/usr/share/ucode/luci/template" "$fixture_root/www/luci-static/andromeda/gaya" "$fixture_root/etc/andromeda"
+printf '/luci-static/andromeda\n' > "$fixture_root/etc/config/.media"
+printf '/luci-static/bootstrap\n' > "$fixture_root/etc/andromeda/previous-media"
+printf "config theme 'theme'\n option color '#2222359a'\n" > "$fixture_root/etc/config/andromeda"
+sh "$SOURCE/install.sh" --source "$SOURCE" --root "$fixture_root"
+[ "$(cat "$fixture_root/etc/andromeda/previous-media")" = /luci-static/bootstrap ]
+[ -s "$fixture_root/www/luci-static/andromeda/main.css" ]
+sh "$SOURCE/install.sh" --restore --root "$fixture_root"
+[ "$(cat "$fixture_root/etc/config/.media")" = /luci-static/bootstrap ]
+echo 'PASS: ucode install, preserved settings, reinstall, restore, unsupported Lua, preflight, activation failure and Alpha migration'

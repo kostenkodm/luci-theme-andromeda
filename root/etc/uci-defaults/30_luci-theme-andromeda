@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ "$PKG_UPGRADE" != 1 ]; then
+	uci get luci.themes.Andromeda >/dev/null 2>&1 || \
+	uci batch <<-EOF
+		set luci.themes.Andromeda=/luci-static/andromeda
+		set luci.main.mediaurlbase=/luci-static/andromeda
+		commit luci
+	EOF
+fi
+
+exit 0
