@@ -48,10 +48,10 @@ test("light sunken is darker than bg, overlay is lighter (toward white)", () => 
   assert.ok(lch(l.surface_overlay).L > lch(l.bg).L, "overlay not above bg");
 });
 
-test("dark surfaces share the midnight blue hue family", () => {
+test("dark surfaces and secondary text stay neutral gray", () => {
   const d = resolveMode("dark");
-  for (const k of ["bg", "surface", "surface_sunken", "text_muted"]) {
-    assert.ok(nearHue(d[k], 275, 10), `${k} hue off: ${d[k]}`);
+  for (const k of ["bg", "surface", "surface_sunken", "surface_overlay", "control_bg", "mega_menu_bg", "text_muted"]) {
+    assert.ok(lch(d[k]).C < 0.0001, `${k} has a color tint: ${d[k]}`);
   }
 });
 

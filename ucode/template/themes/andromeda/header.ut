@@ -175,7 +175,7 @@
 		{% endif %}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 		<meta name="theme-color" content="#f8f8fe" media="(prefers-color-scheme: light)">
-		<meta name="theme-color" content="#090c1c" media="(prefers-color-scheme: dark)">
+		<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 		<meta name="color-scheme" content="light dark">
 		{% if (blank_page): %}
 		{% const _loginBgUrl = tokens.struct_login_bg ? bg_preload_url(tokens.struct_login_bg) : null; -%}

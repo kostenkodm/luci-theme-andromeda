@@ -1,4 +1,4 @@
-// Andromeda's solid cosmic palette. Aurora supplies the derivation engine.
+// Andromeda's neutral dark surfaces with cosmic accents.
 import { resolveTokens } from "@eamonxg/luci-theme-tokens/aurora";
 
 export const COLORS = {
@@ -15,11 +15,11 @@ export const COLORS = {
     danger: "oklch(0.46 0.18 20)",
   },
   dark: {
-    bg: "oklch(0.16 0.035 275)",
-    surface: "oklch(0.22 0.035 275)",
-    text: "oklch(0.95 0.015 275)",
+    bg: "oklch(0.18 0 0)",
+    surface: "oklch(0.23 0 0)",
+    text: "oklch(0.95 0 0)",
     brand: "oklch(0.72 0.14 285)",
-    on_brand: "oklch(0.16 0.035 275)",
+    on_brand: "oklch(0.18 0 0)",
     link: "oklch(0.78 0.12 280)",
     info: "oklch(0.80 0.10 225)",
     warning: "oklch(0.82 0.13 80)",
