@@ -1,4 +1,4 @@
-name: Build luci-theme-alpha APK (OpenWrt >= 24.xx)
+name: Build luci-theme-andromeda APK (OpenWrt >= 24.xx)
 
 on:
   workflow_dispatch:
@@ -38,14 +38,14 @@ jobs:
           cd openwrt-sdk
           # Aktifkan build APK di SDK OpenWrt terbaru via .config override
           echo "CONFIG_USE_APK=y" >> .config
-          echo "CONFIG_PACKAGE_luci-theme-alpha=m" >> .config
+          echo "CONFIG_PACKAGE_luci-theme-andromeda=m" >> .config
 
       - name: Copy package
         run: |
-          mkdir -p openwrt-sdk/package/luci-theme-alpha
+          mkdir -p openwrt-sdk/package/luci-theme-andromeda
           # Copy source folder contents to SDK package folder directly using rsync
           # excludes openwrt-sdk directory to prevent infinitely copying itself
-          rsync -a --exclude=openwrt-sdk/ ./ openwrt-sdk/package/luci-theme-alpha/
+          rsync -a --exclude=openwrt-sdk/ ./ openwrt-sdk/package/luci-theme-andromeda/
 
       - name: Build package
         run: |
@@ -53,10 +53,10 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           make defconfig
-          make package/luci-theme-alpha/compile V=s
+          make package/luci-theme-andromeda/compile V=s
 
       - name: Upload apk
         uses: actions/upload-artifact@v4
         with:
-          name: luci-theme-alpha-apk
+          name: luci-theme-andromeda-apk
           path: openwrt-sdk/bin/packages/**/*/*.apk

@@ -6,12 +6,12 @@
 
 include $(TOPDIR)/rules.mk
 
-THEME_NAME:=alpha
-THEME_TITLE:=Alpha
+THEME_NAME:=andromeda
+THEME_TITLE:=Andromeda
 
 PKG_NAME:=luci-theme-$(THEME_NAME)
-PKG_VERSION:=3.9.7_beta2
-PKG_RELEASE:=10
+PKG_VERSION:=1.0.0
+PKG_RELEASE:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -19,9 +19,9 @@ define Package/luci-theme-$(THEME_NAME)
   SECTION:=luci
   CATEGORY:=LuCI
   SUBMENU:=9. Themes
-  DEPENDS:=+libc +luci-app-alpha-config
-  TITLE:=LuCi Theme For OpenWrt And Alpha OS ONLY - $(THEME_TITLE)
-  URL:=http://facebook.com/derisamedia/
+  DEPENDS:=+libc
+  TITLE:=Compact LuCI theme for OpenWrt - $(THEME_TITLE)
+  URL:=https://github.com/kostenkodm/luci-theme-andromeda
   PKGARCH:=all
 endef
 

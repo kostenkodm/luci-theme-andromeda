@@ -15,19 +15,23 @@
 
 					Licensed to the public under the Apache License 2.0
 					-%>
-					<% local ver=require "luci.version" local uci=require "luci.model.uci" .cursor() local
-						config=uci:get_all("alpha", "theme" ) -- Table to store navbar icons local icon={} -- Iterate
-						through all navbar entries uci:foreach("alpha", "navbar" , function(section) local
-						address=section.address local icon_url=section.icon if address and icon_url then --
-						Remove '/www/luci-static/alpha/' from icon_url
-						icon_url=string.gsub(icon_url, "^/www/luci%-static/alpha/" , "" ) icon[address]=icon_url end
-						end) -- Check navbar enable status local navbar_enabled=config.navbar=="1" -- Calculate number
-						of enabled navbar links local num_links=0 uci:foreach("alpha", "navbar" , function(section) if
-						section.enable=="Enable" then num_links=num_links + 1 end end) -- Calculate link width for
-						responsive design local link_width=string.format("calc(100%% / %d)", num_links > 0 and num_links or 1) -- Retrieve
-						theme properties local background_color=config.color or '#2222359a' local
-						blur_value=tonumber(config.blur) or 20 local link_blur=string.format("blur(%dpx)", blur_value)
-						%>
+					<%
+local ver = require "luci.version"
+local uci = require "luci.model.uci".cursor()
+local config = uci:get_all("andromeda", "theme") or {}
+local icon = {}
+local num_links = 0
+uci:foreach("andromeda", "navbar", function(section)
+    if section.address and section.icon then
+        icon[section.address] = string.gsub(section.icon, "^/www/luci%-static/andromeda/", "")
+    end
+    if section.enable == "Enable" then num_links = num_links + 1 end
+end)
+local navbar_enabled = config.navbar == "1"
+local link_width = string.format("calc(100%% / %d)", math.max(num_links, 1))
+local background_color = config.color or '#2222359a'
+local link_blur = string.format("blur(%dpx)", tonumber(config.blur) or 0)
+%>
 
 						<style>
 							.main>.main-left,
@@ -64,15 +68,15 @@
 
 						</div>
 						<footer class="mobile">
-							<a href="https://github.com/derisamedia/luci-theme-alpha">
-								<%=ver.luciname%> | Alpha OS Theme v3.9.7-r2
+							<a href="https://github.com/kostenkodm/luci-theme-andromeda">
+								<%=ver.luciname%> | Andromeda 1.0.0
 							</a>
 						</footer>
 						</div>
 						<div class="navbar active">
 							<% if navbar_enabled then %>
 								<div class="dropdown">
-									<% uci:foreach("alpha", "navbar" , function(section) local address=section.address
+									<% uci:foreach("andromeda", "navbar" , function(section) local address=section.address
 										local icon_url=icon[address] or 'default/icon.png' local
 										target_blank=section.newtab=="Yes" and 'target="_blank"' or '' if
 										section.enable=="Enable" then %>
@@ -101,7 +105,7 @@
 							}
 						</script>
 						</div>
-						<script type="text/javascript">L.require('menu-alpha')</script>
+						<script type="text/javascript">L.require('menu-andromeda')</script>
 						<script src="<%=media%>/app.js"></script>
 						</body>
 
