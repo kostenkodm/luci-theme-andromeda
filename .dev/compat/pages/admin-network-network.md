@@ -1,5 +1,13 @@
 # admin-network-network
 
+## andromeda-compact-interfaces — smaller desktop cards and controls
+- page: Network → Interfaces
+- package: stock luci-mod-network
+- dom: `#cbi-network-interface .ifacebox`, `.ifacebox-body`, `[data-name="_ifacestat"]`, `.cbi-section-actions`
+- fix: `.dev/src/media/_andromeda.css` uses 112 px desktop cards, 16 px icons and 28 px buttons; long names wrap. Mobile touch targets retain their original size.
+- verified: Edge geometry checks at 1440, 1024, 800 and 390 px; bridge ports, long names and Russian action labels remain inside their containers.
+- fixture: `admin-network-network--compact-interfaces.html`
+
 ## bridge-vlan-descr-hidden — hide the table description row on mobile
 - page: admin-network-network · Network → Interfaces → Devices → Bridge VLAN Filtering (efa07d8 body: "Network -> Interfaces -> Devices -> Bridge VLAN Filtering")
 - package: stock luci-mod-network

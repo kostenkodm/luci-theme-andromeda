@@ -1,5 +1,11 @@
 # Performance — aurora budgets & ledger
 
+Andromeda 2.1 baseline (2026-10-11): main.css 190,289 B (191 KB ceiling),
+login.css 11,982 B, logo.svg 464 B and total admin assets 252,767 B.
+The compact interface controls add ~2.2 KB of CSS; replacing the raster
+logo with a vector saves ~14.6 KB. Total admin transfer is ~12.4 KB lower
+than 2.0 and remains under the 267 KB fork budget.
+
 Andromeda 2.0 fork baseline (2026-10-11, frozen-lockfile build): main.css
 188,086 B; menu-andromeda.js 22,663 B; router-andromeda.js 15,771 B;
 font 23,580 B; logo 15,058 B; total admin assets 265,158 B. The compact

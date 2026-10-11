@@ -44,7 +44,8 @@ for backend in ucode hybrid; do
     [ "$(cat "$fixture_root/etc/config/.media")" = /luci-static/andromeda ]
     [ -s "$fixture_root/www/luci-static/resources/menu-andromeda.js" ]
     [ -s "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut" ]
-    grep -q 'data-asset-version="2.0.0"' "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut"
+    version=$(sed -n 's/^PKG_VERSION:=[[:space:]]*//p' "$SOURCE/Makefile")
+    grep -q "data-asset-version=\"$version\"" "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut"
     if grep -q '{# PKG_VERSION #}' "$fixture_root/usr/share/ucode/luci/template/themes/andromeda/header.ut"; then exit 1; fi
     [ -s "$fixture_root/www/luci-static/andromeda/main.css" ]
     [ -s "$fixture_root/www/luci-static/resources/router-andromeda.js" ]

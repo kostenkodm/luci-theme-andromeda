@@ -60,5 +60,36 @@ body[data-nav-type="sidebar"] {
     & .table :is(th, td, .th, .td) { @apply px-2 py-1.5; }
     & .cbi-map-descr, & .cbi-section-descr { @apply mb-3; }
     & .cbi-page-actions { @apply mt-3 gap-2 pt-3; }
+
+    & :is(.btn, .cbi-button) {
+      @apply min-h-7 rounded-lg px-2 py-1 text-xs leading-4;
+    }
+
+    & .cbi-section-actions > div {
+      @apply flex-wrap gap-1.5;
+    }
+  }
+
+  #cbi-network-interface {
+    & .ifacebox {
+      @apply w-28 min-w-28 max-w-28 rounded-lg text-sm leading-4 shadow-none;
+    }
+
+    & .ifacebox-head {
+      @apply rounded-t-lg px-2 py-1 text-xs leading-4 wrap-anywhere;
+    }
+
+    & .ifacebox-body {
+      @apply gap-0.5 rounded-b-lg p-1.5 leading-4;
+
+      & img { @apply w-4; }
+      & > span { @apply space-y-0 leading-4; }
+      & > br { @apply hidden; }
+      & small { @apply text-[11px] leading-4 wrap-anywhere; }
+    }
+
+    & [data-name="_ifacestat"] {
+      @apply text-xs leading-[1.4];
+    }
   }
 }

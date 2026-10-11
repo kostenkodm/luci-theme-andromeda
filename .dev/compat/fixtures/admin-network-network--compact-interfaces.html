@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru" data-darkmode="true">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Andromeda: compact interfaces</title>
+<link rel="stylesheet" href="../../../htdocs/luci-static/andromeda/main.css">
+<script type="application/json" id="compat">
+{
+  "ledger": "Andromeda compact interface cards",
+  "viewports": [1440, 1024, 800, 390],
+  "checks": [
+    { "fits": "#cbi-network-interface .table" },
+    { "fits": "#cbi-network-interface .ifacebox" },
+    { "nowrap": "#cbi-network-interface .cbi-button" },
+    { "js": "[...document.querySelectorAll('.ifacebox-body img')].every(el => el.getBoundingClientRect().width <= 16.1)", "viewports": [1440, 1024, 800] },
+    { "js": "[...document.querySelectorAll('.ifacebox')].every(el => el.getBoundingClientRect().width <= 112.1)", "viewports": [1440, 1024, 800] },
+    { "js": "[...document.querySelectorAll('.cbi-button')].every(el => el.getBoundingClientRect().height <= 30.1)", "viewports": [1440, 1024, 800] },
+    { "js": "[...document.querySelectorAll('.cbi-button')].every(el => el.getBoundingClientRect().height >= 36)", "viewports": [390] },
+    { "js": "document.documentElement.scrollWidth <= innerWidth + 1" }
+  ]
+}
+</script>
+</head>
+<body data-page="admin-network-network" data-nav-type="sidebar">
+<header><div class="header-content"><a class="brand" href="#">OpenWrt-lab</a><ul class="header-crumb"><li>Сеть</li><li class="crumb-sep">/</li><li class="current">Интерфейсы</li></ul></div></header>
+<aside class="sidebar-panel"><nav class="sidebar-panel-inner">
+  <div class="sidebar-head"><img class="sidebar-logo" src="../../../htdocs/luci-static/andromeda/images/logo.svg" alt=""><a class="sidebar-brand" href="#">OpenWrt-lab</a></div>
+  <ul class="sidebar-list">
+    <li><a class="nav-row" href="#">Состояние</a></li>
+    <li><a class="nav-row" href="#">Система</a></li>
+    <li><a class="nav-row" href="#">Службы</a></li>
+    <li><a class="nav-row is-active-page" href="#">Интерфейсы</a></li>
+    <li><a class="nav-row" href="#">Беспроводная сеть</a></li>
+    <li><a class="nav-row" href="#">Маршрутизация</a></li>
+    <li><a class="nav-row" href="#">DHCP и DNS</a></li>
+    <li><a class="nav-row" href="#">Межсетевой экран</a></li>
+  </ul>
+</nav></aside>
+<div id="maincontent"><div id="view"><div class="cbi-map">
+<div id="cbi-network-interface" class="cbi-section cbi-tblsection"><h3>Интерфейсы</h3>
+<table class="table cbi-section-table"><tbody class="tbody cbi-section-tbody" id="interfaces"></tbody></table>
+</div></div></div></div>
+<script>
+// Mirrors stock LuCI's render_ifacebox_status/render_status DOM. The bridge
+// deliberately has six ports and a long name to exercise wrapping.
+const port = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="3" fill="%23b5c4dc"/><path d="M6 7h12v6H6z" fill="%232a3554"/><path d="M7 18l-3 4m8-4-3 4m8-4-3 4" stroke="%237dd3fc" stroke-width="2"/></svg>'.replaceAll('%23', '#'));
+const icon = () => `<span class="cbi-tooltip-container"><img class="middle" src="${port}" alt="Ethernet"></span>`;
+const data = [
+  ['awg_home', 'awg_home', 'AmneziaWG VPN', '192.0.2.1/24', 0, '107,167,173'],
+  ['lan', 'br-lan', 'Статический адрес', '198.51.100.1/24', 6, '110,181,123'],
+  ['vpn_backup', 'vpn_backup', 'AmneziaWG VPN', '203.0.113.1/32', 0, '143,120,190'],
+  ['wan', 'wan', 'DHCP-клиент', '192.0.2.2/24', 0, '190,121,133'],
+  ['very_long_interface_name', 'br-very_long_device_name', 'Статический адрес', '198.51.100.2/24', 6, '143,120,190']
+];
+document.getElementById('interfaces').innerHTML = data.map(([name, dev, proto, ip, count, color]) => `
+<tr class="tr cbi-section-table-row" data-sid="${name}">
+<td class="td cbi-value-field" data-name="_ifacebox" data-widget="CBI.DummyValue"><div><div class="ifacebox">
+  <div class="ifacebox-head" style="--zone-color-rgb:${color}"><strong>${name}</strong></div>
+  <div class="ifacebox-body">${icon()}${count ? `<span> (${Array.from({length:count}, icon).join('')})</span>` : ''}<br><small>${dev}</small></div>
+</div></div></td>
+<td class="td cbi-value-field" data-name="_ifacestat" data-widget="CBI.DummyValue"><div>
+  <strong>Протокол:</strong> ${proto}<br><strong>Несущая:</strong> Присутствует<br>
+  <strong>Время работы:</strong> 6d 6h 49m 4s<br><strong>MAC:</strong> 02:00:00:00:00:01<br>
+  <strong>Получено (Rx):</strong> 12.34 GiB (123456 Пакетов.)<br>
+  <strong>Передано (Tx):</strong> 56.78 GiB (789012 Пакетов.)<br><strong>IPv4:</strong> ${ip}
+</div></td>
+<td class="td cbi-section-actions"><div>
+  <button class="cbi-button cbi-button-neutral reconnect">Перезапустить</button>
+  <button class="cbi-button cbi-button-neutral down">Остановить</button>
+  <button class="cbi-button cbi-button-edit">Редактировать</button>
+  <button class="cbi-button cbi-button-remove">Удалить</button>
+</div></td></tr>`).join('');
+</script>
+</body>
+</html>

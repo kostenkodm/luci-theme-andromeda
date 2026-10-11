@@ -17,9 +17,9 @@ test("production assets stay within raw-transfer budgets", () => {
   const font = bytes("andromeda/fonts/lato-v24-latin-regular.woff2");
   const logo = bytes("andromeda/images/logo.svg");
 
-  // Andromeda adds ~3 KB of compact desktop layout rules to Aurora.
-  // The aggregate budget below allows the same ~3 KB increase.
-  assert.ok(main <= 190_000, "main.css exceeds 190 KB");
+  // Andromeda 2.1 adds compact interface cards and buttons. The new vector
+  // logo saves ~14 KB, so the aggregate budget below still holds.
+  assert.ok(main <= 191_000, "main.css exceeds 191 KB");
   assert.ok(login <= 12_000, "login.css exceeds 12 KB");
   // 22K: palette recents (record on pick, pure-LRU browse order, storage
   // validation) added ~0.8 KB and the ">" logout command ~0.2 KB. The total

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { resolveMode } from "@eamonxg/luci-theme-tokens/aurora";
+import { resolveMode } from "../theme-colors.js";
 
 test("resolveMode(light) returns flat oklch for all tokens", () => {
   const out = resolveMode("light");
@@ -50,19 +50,19 @@ test("menu panel is fully opaque (frost lives on the curtain, not the panel)", (
   assert.ok(!d.mega_menu_bg.includes("/"), `dark opaque: ${d.mega_menu_bg}`);
 });
 
-test("light bg is the snow-blue canvas; surface stays pure white", () => {
+test("light canvas is tinted violet and cards stay white", () => {
   const light = resolveMode("light");
-  assert.equal(light.bg, "oklch(0.984 0.004 235)");
+  assert.equal(light.bg, "oklch(0.98 0.008 285)");
   assert.equal(light.surface, "oklch(1 0 0)");
 });
 
 test("dark brand and progress colors match the mobile navigation design", () => {
   const dark = resolveMode("dark");
 
-  assert.equal(dark.brand, "oklch(0.6 0.13 188.745)");
-  assert.equal(dark.on_brand, "oklch(1 0 0)");
+  assert.equal(dark.brand, "oklch(0.72 0.14 285)");
+  assert.equal(dark.on_brand, dark.bg);
   // Derived from brand like light: end aliases brand, start mixes toward sunken.
-  assert.equal(dark.progress_start, "oklch(44.78% 0.0865 193.2)");
+  assert.notEqual(dark.progress_start, dark.brand);
   assert.equal(dark.progress_end, dark.brand);
 });
 

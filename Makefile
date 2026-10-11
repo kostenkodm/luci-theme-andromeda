@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Andromeda Theme (Compact Aurora with expanded sidebar)
 LUCI_DEPENDS:=+luci-base
 
-PKG_VERSION:=2.0.0
+PKG_VERSION:=2.1.0
 PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 

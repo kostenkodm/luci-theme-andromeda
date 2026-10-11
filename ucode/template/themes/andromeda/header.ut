@@ -68,7 +68,7 @@
 
 	const nav_type = 'sidebar';
 	const toolbar_enabled = tokens.toolbar_enabled ? tokens.toolbar_enabled == '1' : true;
-	const icon_cache_version = tokens.icon_cache_version || '0';
+	const icon_cache_version = tokens.icon_cache_version || '{# PKG_VERSION #}';
 	const font_css = readfile(`/www${media}/fonts/andromeda-font.css`);
 	const preload_raw = readfile(`/www${media}/fonts/preload.txt`);
 	// null = file absent (older config app): fall back to Lato below.
@@ -174,8 +174,8 @@
 		</script>
 		{% endif %}
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
-		<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+		<meta name="theme-color" content="#f8f8fe" media="(prefers-color-scheme: light)">
+		<meta name="theme-color" content="#090c1c" media="(prefers-color-scheme: dark)">
 		<meta name="color-scheme" content="light dark">
 		{% if (blank_page): %}
 		{% const _loginBgUrl = tokens.struct_login_bg ? bg_preload_url(tokens.struct_login_bg) : null; -%}
@@ -206,7 +206,7 @@
 		{% if (favicon_png): %}
 		<link rel="icon" href="{{ media }}/images/{{ favicon_png }}?v={{ icon_cache_version }}" type="image/png">
 		{% endif %}
-		<link rel="icon" href="{{ media }}/images/{{ favicon_ico }}" sizes="32x32">
+		<link rel="icon" href="{{ media }}/images/{{ favicon_ico }}?v={{ icon_cache_version }}" sizes="32x32">
 		<link rel="apple-touch-icon" href="{{ media }}/images/{{ pwa_apple_touch }}?v={{ icon_cache_version }}">
 		<link rel="manifest" href="{{ media }}/images/app.webmanifest">
 		<meta name="application-name" content="LuCI Andromeda">
@@ -318,7 +318,7 @@
 			<nav class="sidebar-panel-inner">
 				<div class="sidebar-head">
 					<img class="sidebar-logo" src="{{ media }}/images/{{ logo_svg }}?v={{ icon_cache_version }}" alt="" aria-hidden="true">
-					<a class="sidebar-brand" href="/" title="{{ entityencode(hostname, true) }}">Andromeda</a>
+					<a class="sidebar-brand" href="/" title="Andromeda · {{ entityencode(hostname, true) }}">{{ entityencode(hostname) }}</a>
 				</div>
 				<ul class="sidebar-list" id="sidebar-list" data-active-path="{{ entityencode(join('/', slice(ctx?.path ?? [], 1, 3)), true) }}"></ul>
 				<div class="sidebar-footer" id="sidebar-footer"></div>

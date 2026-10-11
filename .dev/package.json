@@ -3,10 +3,11 @@
 	"description": "Modern OpenWrt LuCI theme built with Vite and TailwindCSS",
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "npm run tokens && vite",
 		"setup:router": "luci-theme-setup",
-		"build": "npm run clean && vite build",
+		"build": "npm run tokens && npm run clean && vite build",
 		"clean": "luci-theme-clean",
+		"tokens": "node scripts/build-tokens.mjs",
 		"test": "node --test tests/*.test.js"
 	},
 	"engines": {

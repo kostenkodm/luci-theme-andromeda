@@ -13,7 +13,7 @@ const boardinfo = ubus.call('system', 'board') ?? {};
 const themeTokens = cursor().get_all('andromeda', 'theme') || {};
 themeTokens.struct_login_bg = '';
 const loginLogoSvg = themeTokens.logo_svg || 'logo.svg';
-const loginIconVer = themeTokens.icon_cache_version || '0';
+const loginIconVer = themeTokens.icon_cache_version || '{# PKG_VERSION #}';
 -%}
 {% include('header', {
 	blank_page: true,

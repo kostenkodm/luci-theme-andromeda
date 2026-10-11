@@ -4,8 +4,8 @@
   "start_url": "/cgi-bin/luci",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#f8fafc",
+  "background_color": "#090c1c",
+  "theme_color": "#090c1c",
   "icons": [
     {
       "src": "/luci-static/andromeda/images/app-icon-192x192.png",

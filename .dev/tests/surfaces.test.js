@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Color from "colorjs.io";
-import { resolveMode } from "@eamonxg/luci-theme-tokens/aurora";
+import { resolveMode } from "../theme-colors.js";
 
 // [L, C, H] in oklch; alpha separate.
 const lch = (s) => {
@@ -16,16 +16,29 @@ const nearHue = (s, h, tol = 8) => {
 };
 const read = (p) => readFileSync(new URL(p, import.meta.url), "utf8");
 
+test("small cosmic controls and secondary labels remain readable in both modes", () => {
+  for (const mode of ["light", "dark"]) {
+    const c = resolveMode(mode);
+    for (const [foreground, background] of [
+      ["text", "surface"], ["text_muted", "surface"], ["text_subtle", "bg"],
+      ["link", "surface"], ["on_brand", "brand"], ["on_brand", "brand_hover"],
+    ]) {
+      const contrast = new Color(c[foreground]).contrast(new Color(c[background]), "WCAG21");
+      assert.ok(contrast >= 4.5, `${mode} ${foreground}/${background}: ${contrast}`);
+    }
+  }
+});
+
 test("light low-emphasis surfaces carry the Gray tint (chroma > 0)", () => {
   const l = resolveMode("light");
   assert.ok(lch(l.surface_sunken).C > 0.001, `sunken flat: ${l.surface_sunken}`);
   assert.ok(lch(l.surface_overlay).C > 0.001, `overlay flat: ${l.surface_overlay}`);
 });
 
-test("light bg, sunken and overlay share one hue family (~235)", () => {
+test("light bg, sunken and overlay share the violet hue family", () => {
   const l = resolveMode("light");
   for (const k of ["bg", "surface_sunken", "surface_overlay"]) {
-    assert.ok(nearHue(l[k], 235), `${k} hue off: ${l[k]}`);
+    assert.ok(nearHue(l[k], 285), `${k} hue off: ${l[k]}`);
   }
 });
 
@@ -35,10 +48,10 @@ test("light sunken is darker than bg, overlay is lighter (toward white)", () => 
   assert.ok(lch(l.surface_overlay).L > lch(l.bg).L, "overlay not above bg");
 });
 
-test("dark surfaces are the Gray family (~264), not zinc (286)", () => {
+test("dark surfaces share the midnight blue hue family", () => {
   const d = resolveMode("dark");
   for (const k of ["bg", "surface", "surface_sunken", "text_muted"]) {
-    assert.ok(nearHue(d[k], 264, 10), `${k} hue off: ${d[k]}`);
+    assert.ok(nearHue(d[k], 275, 10), `${k} hue off: ${d[k]}`);
   }
 });
 
