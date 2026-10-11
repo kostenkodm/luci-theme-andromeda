@@ -1,6 +1,4 @@
-/*--------------------
-catatan usahakan untuk mengganti bg pakai format png, kalo jpg ganti aja di bagian body, sesuaikan aja nama formatnya
----------------------*/
+/* Andromeda login styles */
 *,
 *::before,
 *::after {
@@ -17,10 +15,8 @@ html {
 
 body {
 	height: 100%;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
+	background-color: #111827;
+	background-image: none;
 }
 
 

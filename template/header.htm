@@ -58,8 +58,7 @@
 
 						<body
 							class="lang_<%=luci.i18n.context.lang%> <% if luci.dispatcher.context.authsession then %>logged-in<% end %> <% if not (path == "") then %>node-<%= path %><% else %>node-main-login<% end %>"
-							data-page="<%= pcdata(path) %>"
-							style="background-image:url('/luci-static/andromeda/background/dashboard.png')">
+							data-page="<%= pcdata(path) %>">
 							<header>
 								<div class="fill">
 									<div class="container">

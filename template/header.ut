@@ -37,7 +37,7 @@
 </style>
 {% endif %}
 </head>
-<body class="lang_{{ dispatcher.lang }} {% if (ctx.authsession): %}logged-in{% endif %} {% if (length(ctx.request_path) > 0): %}node-{{ join('-', ctx.request_path) }}{% else %}node-main-login{% endif %}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}" style="background-image:url('/luci-static/andromeda/background/dashboard.png')">
+<body class="lang_{{ dispatcher.lang }} {% if (ctx.authsession): %}logged-in{% endif %} {% if (length(ctx.request_path) > 0): %}node-{{ join('-', ctx.request_path) }}{% else %}node-main-login{% endif %}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
 <header>
 	<div class="fill">
 		<div class="container">

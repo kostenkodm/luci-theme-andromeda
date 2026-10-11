@@ -20,7 +20,7 @@
 	<title>Andromeda - Login</title>
 </head>
 		
-<body class="lang_{{ dispatcher.lang }} node-main-login" data-page="" style="background-image:url('/luci-static/andromeda/background/login.png')">
+<body class="lang_{{ dispatcher.lang }} node-main-login" data-page="">
 	<header>
 		<div class="fill">
 			<div class="container">
